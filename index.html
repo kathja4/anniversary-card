@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy 18th Anniversary</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: #1a0a0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    overflow: hidden;
+  }
+
+  #stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* ── COVER ── */
+  #cover {
+    position: absolute;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  #cover:hover { transform: scale(1.03); }
+  #cover svg { display: block; }
+
+  /* ── CARD ── */
+  #card {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    position: relative;
+  }
+
+  #card.open { opacity: 1; }
+
+  .card-heart-svg { display: block; }
+
+  .card-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+    text-align: center;
+    pointer-events: none;
+    width: 260px;
+  }
+
+  .main-msg {
+    font-size: clamp(22px, 5vw, 30px);
+    font-style: italic;
+    color: #fff;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+
+  .infinity {
+    display: block;
+    margin-top: 18px;
+    font-size: 28px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 4px;
+  }
+
+  /* ── CONFETTI ── */
+  .cp {
+    position: absolute;
+    border-radius: 1px;
+    pointer-events: none;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(0) rotate(0deg);    opacity: 1; }
+    100% { transform: translateY(110vh) rotate(600deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+  <!-- COVER: plain deep-rose heart, no text -->
+  <div id="cover" onclick="openCard()" title="Öffnen">
+    <svg width="360" height="340" viewBox="0 0 360 340" xmlns="http://www.w3.org/2000/svg">
+      <path d="M180 318 C180 318 16 210 16 96
+               C16 46 56 14 104 14
+               C135 14 160 31 180 56
+               C200 31 225 14 256 14
+               C304 14 344 46 344 96
+               C344 210 180 318 180 318Z"
+            fill="#8B1A4A"/>
+    </svg>
+  </div>
+
+  <!-- CARD: same shape, lighter fill, text inside -->
+  <div id="card">
+    <svg class="card-heart-svg" width="360" height="340" viewBox="0 0 360 340" xmlns="http://www.w3.org/2000/svg">
+      <path d="M180 318 C180 318 16 210 16 96
+               C16 46 56 14 104 14
+               C135 14 160 31 180 56
+               C200 31 225 14 256 14
+               C304 14 344 46 344 96
+               C344 210 180 318 180 318Z"
+            fill="#C0395E"/>
+      <!-- subtle inner glow rim -->
+      <path d="M180 318 C180 318 16 210 16 96
+               C16 46 56 14 104 14
+               C135 14 160 31 180 56
+               C200 31 225 14 256 14
+               C304 14 344 46 344 96
+               C344 210 180 318 180 318Z"
+            fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
+    </svg>
+
+    <div class="card-text">
+      <span class="main-msg">Happy 18th Anniversary<br>my love ❤️</span>
+      <span class="infinity">∞</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function openCard() {
+  document.getElementById('cover').style.display = 'none';
+  var card = document.getElementById('card');
+  card.style.display = 'block';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      card.classList.add('open');
+    });
+  });
+  launchConfetti();
+}
+
+function launchConfetti() {
+  var stage = document.getElementById('stage');
+  var colors = ['#C0395E','#E8698A','#F4A0B5','#8B1A4A','#FFD6E0','#ffffff'];
+  for (var i = 0; i < 70; i++) {
+    (function(n) {
+      setTimeout(function() {
+        var el = document.createElement('div');
+        el.className = 'cp';
+        var size = Math.round(Math.random() * 7 + 4);
+        el.style.cssText =
+          'width:' + size + 'px;' +
+          'height:' + size + 'px;' +
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';' +
+          'background:' + colors[Math.floor(Math.random() * colors.length)] + ';' +
+          'top:-10px;' +
+          'left:' + Math.round(Math.random() * 100) + 'vw;' +
+          'animation-duration:' + (Math.random() * 2.5 + 2).toFixed(2) + 's;';
+        stage.appendChild(el);
+        setTimeout(function() { el.remove(); }, 5000);
+      }, n * 40);
+    })(i);
+  }
+}
+</script>
+</body>
+</html>
